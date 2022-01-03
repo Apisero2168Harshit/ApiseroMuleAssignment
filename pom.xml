@@ -54,7 +54,7 @@
 						<muleVersion>4.4.0</muleVersion>
 						<username>${anypoint.username}</username>
 						<password>${anypoint.password}</password>
-						<applicationName>movie-management-demo</applicationName>
+						<applicationName>BookB50Hars</applicationName>
 						<environment>Sandbox</environment>
 						<workerType>MICRO</workerType>
 						<objectStoreV2>true</objectStoreV2>
