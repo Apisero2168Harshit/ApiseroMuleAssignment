@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd">
+	<mongo:config name="MongoDB_Config" doc:name="MongoDB Config" doc:id="0ce71df5-e76c-435e-ae13-d870686de4a6" >
+		<mongo:connection-string-connection connectionString="mongodb+srv://prajjvalrajvanshi:reZero1#@cluster.xkaz2.mongodb.net/bookmyshow?retryWrites=true&amp;w=majority" />
+	</mongo:config>
+	<flow name="movie-managementFlow" doc:id="efd0ec71-4b58-40f4-9763-3a1378d08257" >
+		<http:listener doc:name="Listener" doc:id="eda1a794-abf7-472b-9d11-521f38cf6f16" config-ref="HTTP_Listener_config" path="/movies" allowedMethods="GET"/>
+		<mongo:find-documents collectionName="movie" fields="movieName,movieCode,address,city,movieDate,emptySeats,totalSeats,language,dimension,startTime,endTime,price" doc:name="Find documents" doc:id="80d2f2e8-b90b-49cc-bca8-0ea885649c7a" config-ref="MongoDB_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="d154591d-dc23-40aa-ba17-c3f2a78d2333" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (value,index) ->{
+     movieName: value.movieName,
+     movieCode: value.movieCode,
+     address: value.address,
+     city: value.city,
+     movieDate: value.movieDate,
+     emptySeats: value.emptySeats,
+     totalSeats: value.totalSeats,
+     language: value.language,
+     dimension: value.dimension,
+     startTime: value.startTime,
+     endTime: value.endTime,
+     price: value.price
+ }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
